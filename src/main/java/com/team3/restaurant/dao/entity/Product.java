@@ -23,7 +23,7 @@ public class Product {
     @Column
     private BigDecimal price;
 
-    @OneToMany( mappedBy = "product", fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Ingredients> ingredients;
 
     @Enumerated(EnumType.STRING)

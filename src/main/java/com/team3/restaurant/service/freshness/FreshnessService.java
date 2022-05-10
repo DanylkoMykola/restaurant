@@ -7,6 +7,8 @@ import com.team3.restaurant.service.dto.FreshnessDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +30,21 @@ public class FreshnessService {
     public List<FreshnessDto> getProductFreshness() {
         List<Ingredients> ingredientsList = ingredientsRepo.getAllByAmountIsNotNull();
         return ingredientsList.stream()
-                .map(ingredients ->  modelMapper.map(ingredients, FreshnessDto.class))
+                .map(ingredients -> modelMapper.map(ingredients, FreshnessDto.class))
+                .map(this::calculateExpirationDays)
                 .collect(Collectors.toList());
+    }
+    private FreshnessDto calculateExpirationDays(FreshnessDto freshnessDto) {
+        Duration duration = Duration.between(LocalDateTime.now(), freshnessDto.getExpirationDate());
+        long daysLeft = duration.toDays();
+        long hoursLeft = duration.minusDays(duration.toDays()).toHours();
+        freshnessDto.setDayLeft(daysLeft);
+        if (hoursLeft > 0) {
+            freshnessDto.setHoursLeft(hoursLeft);
+        }
+        else {
+            freshnessDto.setHoursLeft(0L);
+        }
+        return freshnessDto;
     }
 }

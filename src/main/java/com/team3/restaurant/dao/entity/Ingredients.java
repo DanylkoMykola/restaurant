@@ -9,6 +9,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,9 +39,9 @@ public class Ingredients {
     private LocalDateTime buyDate;
 
     @Column
-    private Double expiration;
+    private LocalDateTime expiration;
 
-    @ManyToOne
-    private Product product;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Product> products;
 
 }
