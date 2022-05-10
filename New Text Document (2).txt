@@ -1,0 +1,58 @@
+function wf_ass_retrieve_end(res_type) {
+  if (arr[res_type].dc != "") {
+        //Execute function after full data loading in Short List pane
+   var interval_id = setInterval(function() {
+            wf_ass_delete(res_type);
+ if (arr[res_type].shl.RowCount() > 0) {
+                clearInterval(interval_id);
+      }
+        }, 100);
+    }
+}
+/**
+ * Checks if objects in Short List pane are selected.
+ * Deletes objects from Assigned pane if they are not in Short List pane.
+ *
+ * @param res_type the index of tab(Labor, Equipment, Material)
+ * @param force the flag to indicate objects deleting
+ */
+function wf_ass_delete(res_type, force) {
+    var res_list = ';';
+    var tmp;
+    var j, k;
+    tmp_arr = new Array();
+    //Check if Short List pane is not empty
+    if (arr[res_type].shl.RowCount() > 0) {
+        //Get ids of objects from Assigned pane
+        for (j = 1; j <= arr[res_type].ass.RowCount(); j++) {
+            res_list += '' + arr[res_type].ass.GetItem(j, arr[res_type].res_col_name) + ';';
+        }
+        //Get ids of objects from Short List pane
+        for (j = 1; j <= arr[res_type].shl.RowCount(); j++) {
+            tmp = arr[res_type].shl.GetItem(j, arr[res_type].res_col_name);
+            //If ids in Short List pane are in Assigned pane - select them
+            if (res_list.indexOf(';' + tmp + ';', 0) != -1) {
+                arr[res_type].shl.SetItem(j, 'selected', 1);
+                res_list = res_list.replace(new RegExp(';' + tmp + ';', "g"), ";");
+            }
+            else {
+                arr[res_type].shl.SetItem(j, 'selected', 0);
+            }
+        }
+        //If ids in Assigned pane are not in Short List pane - delete them
+        tmp_arr = res_list.split(";");
+        var modified = arr[res_type].ass.IsModified();
+        if (modified || force) {
+            for (j = 0; j < tmp_arr.length; j++) {
+                if (tmp_arr[j]) {
+                    k = arr[res_type].ass.Find(arr[res_type].res_col_name + "==" + tmp_arr[j]);
+                    if (k > 0) arr[res_type].ass.DeleteRow(k);
+                }
+            }
+        }
+        // If Assigned datawindow had no changes before adjusting, modified status should be reset
+        if (!modified && !force) {
+            arr[res_type].ass.ResetUpdate();
+        }
+    }
+}
