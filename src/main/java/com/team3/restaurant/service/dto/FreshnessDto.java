@@ -17,5 +17,7 @@ public class FreshnessDto {
 
     private LocalDateTime expirationDate;
 
-    private Double dayLeft;
+    private Long dayLeft;
+
+    private Long hoursLeft;
 }

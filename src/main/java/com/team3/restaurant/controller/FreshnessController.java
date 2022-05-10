@@ -1,4 +1,4 @@
-package com.team3.restaurant;
+package com.team3.restaurant.controller;
 
 
 import com.team3.restaurant.service.dto.FreshnessDto;
