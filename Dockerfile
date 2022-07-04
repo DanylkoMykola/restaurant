@@ -6,5 +6,5 @@ RUN mvn -f /usr/src/app/pom.xml clean package -DskipTests
 
 FROM adoptopenjdk:11-jre-hotspot
 ARG JAR_FILE=*.jar
-COPY --from=build target/restaurant-microservices.jar /usr/app/restaurant-microservices.jar
-ENTRYPOINT ["java","-jar","/restaurant-microservices.jar"]
+COPY --from=build /usr/src/app/target/restaurant-microservices.jar /usr/app/restaurant-microservices.jar
+ENTRYPOINT ["java","-jar","/usr/app/restaurant-microservices.jar"]
