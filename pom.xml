@@ -92,6 +92,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>restaurant-microservices</finalName>
 	</build>
 
 </project>
