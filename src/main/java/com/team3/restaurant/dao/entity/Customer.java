@@ -1,11 +1,18 @@
 package com.team3.restaurant.dao.entity;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Table(name = "customer")
 @Entity
 public class Customer {
@@ -15,17 +22,8 @@ public class Customer {
     private Long id;
 
     @Column
-    private String first_name;
-
-    @Column
-    private String surname;
-
-    @Column
-    private String email;
+    private String name;
 
     @Column
     private Double discount;
-
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    private List<Address> addresses;
 }
